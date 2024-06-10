@@ -1,0 +1,11 @@
+const express = require("express")
+const router = express.Router()
+const { createNewAppointment, getAllAppointMents, completedAppointments, upcomingAppointements, markAppointementCompleted } = require("../controllers/appointment")
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+router.use(restrictUserWithoutToken)
+router.post("/", createNewAppointment)
+router.get("/", getAllAppointMents)
+router.get("/complete", completedAppointments)
+router.get("/future", upcomingAppointements)
+router.patch("/:id", markAppointementCompleted)
+module.exports = router
