@@ -5,24 +5,41 @@ const http = require("http");
 const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+<<<<<<< HEAD
 const mongoose = require('mongoose');
 
 const userRouterV1 = require("./routes/userRouteV1");
 const childRouterV1 = require("./routes/childRouteV1");
 const imageRouterV1 = require("./routes/imageRouteV1")
+=======
+const mongoose = require("mongoose");
+
+const userRouterV1 = require("./routes/userRouteV1");
+const childRouterV1 = require("./routes/childRouteV1");
+// const imageRouterV1 = require("./routes/imageRouteV1");
+>>>>>>> recovery-branch
 const appointmentRouterV1 = require("./routes/appointmentRouteV1");
 const doctorRouterV1 = require("./routes/doctorRouteV1");
 const documentRouterV1 = require("./routes/documentRouterV1");
 const paymentRouterV1 = require("./routes/paymentRouteV1");
 const subscriptionRouterV1 = require("./routes/subscriptionRouterV1");
 const messageRouterV1 = require("./routes/messageRouteV1");
+<<<<<<< HEAD
 const reportRouterV1 = require("./routes/reportRoute")
 
+=======
+// const reportRouterV1 = require("./routes/reportRoute");
+const otpRouteV1 = require("./routes/otpRouteV1.js");
+>>>>>>> recovery-branch
 const { checkForAuthenticationToken } = require("./middlewares/authentication");
 const { connectMongoDb } = require("./connection");
 
 const app = express();
+<<<<<<< HEAD
 const PORT = 4000;
+=======
+const PORT = process.env.PORT || 4000;
+>>>>>>> recovery-branch
 
 // Connection
 connectMongoDb(process.env.MONGO_CONNECTION_URL).then(() =>
@@ -38,6 +55,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+<<<<<<< HEAD
 app.use((req, res, next) => {
   const msg = `${req.method} \ ${req.url} ${req.hostname} ${Date.now()}\n`;
   fs.appendFile("log.txt", msg, () => { });
@@ -112,3 +130,41 @@ io.on("connection", (socket) => {
 
   socket.join(socket.userId);
 });
+=======
+// Logging middleware
+app.use((req, res, next) => {
+  const msg = `${req.method} \ ${req.url} ${req.hostname} ${Date.now()}\n`;
+  fs.appendFile("log.txt", msg, () => {});
+  next();
+});
+
+// User routes (authentication not needed for signup/login)
+app.use("/api/v1/user", userRouterV1);
+app.use("/api/v1/otp", otpRouteV1);
+// Protected routes
+app.use("/api/v1/child", checkForAuthenticationToken(), childRouterV1);
+// app.use("/api/v1/image", checkForAuthenticationToken(), imageRouterV1);
+app.use(
+  "/api/v1/appointment",
+  checkForAuthenticationToken(),
+  appointmentRouterV1
+);
+// , checkForAuthenticationToken()
+app.use("/api/v1/doctor", doctorRouterV1);
+app.use("/api/v1/document", checkForAuthenticationToken(), documentRouterV1);
+app.use("/api/v1/payment", checkForAuthenticationToken(), paymentRouterV1);
+app.use(
+  "/api/v1/subscription",
+  checkForAuthenticationToken(),
+  subscriptionRouterV1
+);
+// app.use("/api/v1/report", checkForAuthenticationToken(), reportRouterV1);
+app.use("/api/v1/chat", checkForAuthenticationToken(), messageRouterV1);
+
+// Start server
+const server = app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
+// Initialize Socket.io
+const initializeSocket = require("./socket");
+initializeSocket(server);
+>>>>>>> recovery-branch

@@ -6,7 +6,11 @@ const messageSchema = new Schema({
         type: String,  // Corrected type from string to String
         required: 'sender is required',
     },
+<<<<<<< HEAD
     reciverId: {
+=======
+    receiverId: {
+>>>>>>> recovery-branch
         type: String,
         required: 'reciver is required',
     },

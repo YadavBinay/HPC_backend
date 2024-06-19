@@ -1,4 +1,5 @@
 # Node.js dependencies
+<<<<<<< HEAD
 node_modules/
 
 # Environment variables
@@ -6,3 +7,13 @@ node_modules/
 
 # Log files
 *.txt
+=======
+# node_modules/
+
+# Environment variables
+# .env
+
+# Log files
+*.txt
+node_modules
+>>>>>>> recovery-branch
