@@ -19,13 +19,10 @@ const AppointmentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-<<<<<<< HEAD
-=======
     duration:{
         type: Number,
         required:true
     },
->>>>>>> recovery-branch
     state: {
         type: Boolean,
         default: false
