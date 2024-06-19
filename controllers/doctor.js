@@ -1,12 +1,40 @@
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const doctorModel = require("../models/doctorModel");
 
 const createDoctor = async (req, res) => {
   try {
-    const { name, specialization, available } = req.body;
-    const doctor = await doctorModel.create({
+    // const { name, specialization, available } = req.body;
+    const {
       name,
       specialization,
       available,
+      location,
+      contactNumber,
+      email,
+      experience,
+      education,
+      bio,
+    } = req.body;
+
+    // Handle file upload
+    let profilePicture = "";
+    if (req.file) {
+      profilePicture = path.join(uploadDir, req.file.filename);
+    }
+
+    const doctor = await doctorModel.create({
+      name,
+      specialization,
+      location,
+      available,
+      profilePicture,
+      contactNumber,
+      email,
+      experience,
+      education,
+      bio,
     });
     res.status(201).json(doctor);
   } catch (error) {
