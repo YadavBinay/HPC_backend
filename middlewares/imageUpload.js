@@ -1,12 +1,12 @@
 const multer = require("multer");
-
 const path = require("path");
-const fs = require('fs')
-// Define upload directories for doctors and users
-const doctorUploadDir = path.join( "uploads", "images", "doctors");
-const userUploadDir = path.join( "uploads", "images", "users");
-// Ensure the directory exists
+const fs = require("fs");
 
+// Define upload directories for doctors and users
+const doctorUploadDir = path.join("uploads", "images", "doctors");
+const userUploadDir = path.join("uploads", "images", "users");
+
+// Ensure the directory exists
 if (!fs.existsSync(doctorUploadDir)) {
   fs.mkdirSync(doctorUploadDir, { recursive: true });
 }
@@ -26,10 +26,11 @@ const permanentStorage = (uploadDir) =>
     },
   });
 
-  // defaults to temporary storage
-const upload = (storageType=tempStorage) => {
+// Defaults to temporary storage
+const upload = (storageType = tempStorage) => {
   return multer({ storage: storageType });
 };
+
 module.exports = {
   upload,
   tempStorage,
