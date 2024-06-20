@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 
 const userRouterV1 = require("./routes/userRouteV1");
 const childRouterV1 = require("./routes/childRouteV1");
-// const imageRouterV1 = require("./routes/imageRouteV1");
+const imageRouterV1 = require("./routes/imageRouteV1");
 const appointmentRouterV1 = require("./routes/appointmentRouteV1");
 const doctorRouterV1 = require("./routes/doctorRouteV1");
 const documentRouterV1 = require("./routes/documentRouterV1");
@@ -18,7 +18,7 @@ const subscriptionRouterV1 = require("./routes/subscriptionRouterV1");
 const messageRouterV1 = require("./routes/messageRouteV1");
 const reportRouterV1 = require("./routes/reportRoute");
 
-// const reportRouterV1 = require("./routes/reportRoute");
+const reportRouterV1 = require("./routes/reportRoute");
 const otpRouteV1 = require("./routes/otpRouteV1.js");
 const { checkForAuthenticationToken } = require("./middlewares/authentication");
 const { connectMongoDb } = require("./connection");
@@ -54,7 +54,7 @@ app.use("/api/v1/user", userRouterV1);
 app.use("/api/v1/otp", otpRouteV1);
 // Protected routes
 app.use("/api/v1/child", checkForAuthenticationToken(), childRouterV1);
-// app.use("/api/v1/image", checkForAuthenticationToken(), imageRouterV1);
+app.use("/api/v1/image", checkForAuthenticationToken(), imageRouterV1);
 app.use(
   "/api/v1/appointment",
   checkForAuthenticationToken(),
@@ -69,7 +69,7 @@ app.use(
   checkForAuthenticationToken(),
   subscriptionRouterV1
 );
-// app.use("/api/v1/report", checkForAuthenticationToken(), reportRouterV1);
+app.use("/api/v1/report", checkForAuthenticationToken(), reportRouterV1);
 app.use("/api/v1/chat", checkForAuthenticationToken(), messageRouterV1);
 
 // Start server
