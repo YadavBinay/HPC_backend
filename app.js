@@ -6,6 +6,7 @@ const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const userRouterV1 = require("./routes/userRouteV1");
 const childRouterV1 = require("./routes/childRouteV1");
@@ -37,6 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 app.use(cors());
 
 // Logging middleware
@@ -46,7 +48,7 @@ app.use((req, res, next) => {
   next();
 });
 app.get("/", (req, res) => {
-  res.send("<h1>HPC</h1>");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 // User routes (authentication not needed for signup/login)
 app.use("/api/v1/user", userRouterV1);

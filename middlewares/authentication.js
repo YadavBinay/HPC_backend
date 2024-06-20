@@ -1,13 +1,12 @@
 const { validateToken } = require("../services/authentication");
-const UserModel = require('../models/userModel');
+const UserModel = require("../models/userModel");
 
 function checkForAuthenticationToken() {
   return async (req, res, next) => {
     if (!req.headers?.authorization) {
-      console.log("NotAuthenicated")
+      console.log("NotAuthenicated");
       return next();
     }
-
 
     try {
       const bearerToken = req.headers.authorization;
@@ -19,26 +18,27 @@ function checkForAuthenticationToken() {
       console.log("error in token validation ", error);
     }
     return next();
-  }
+  };
 }
 const restrictUserWithoutToken = async (req, res, next) => {
-  if (!req.headers?.authorization) return res.json({ msg: "You are not authorized user" });
+  if (!req.headers?.authorization)
+    return res.json({ msg: "You are not authorized user" });
   try {
     const bearerToken = req.headers.authorization;
     // console.log(bearerToken)
     const token = bearerToken.split(" ")[1];
     const userPayload = validateToken(token);
     const userData = await UserModel.findOne({ _id: userPayload.userId });
-    if (!userData) return res.json({ msg: "You are not authorized user" })
+    if (!userData) return res.json({ msg: "You are not authorized user" });
     req.body.user = userData;
     // console.log("reqbodyuserdata", req.body.user);
   } catch (error) {
-    return res.json({ msg: `error: ${error}` })
+    return res.json({ msg: `error: ${error}` });
   }
   return next();
-}
+};
 
 module.exports = {
   checkForAuthenticationToken,
-  restrictUserWithoutToken
+  restrictUserWithoutToken,
 };

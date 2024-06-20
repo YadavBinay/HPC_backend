@@ -27,7 +27,6 @@ router.post(
 
 router.post("/login", login);
 
-router.get("/user", userDetail);
 
 router.get("/", userDetails);
 

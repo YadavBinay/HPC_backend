@@ -107,17 +107,16 @@ async function login(req, res) {
   return res.status(200).json({ token, userName, userId: user._id });
 }
 
-async function userDetail(req, res) {
-  if (!req.body.user) return res.status(401).json({ msg: "Unauthorized" });
-  return res.json({ data: req.body.user });
-}
+
 async function userDetails(req, res) {
+  const {userId} = req.body;
+  if (!userId) res.status(400).json({msg:"pass a userId"})
   try {
-    const users = await UserModel.find({});
-    if (!users) {
+    const user = await UserModel.find({_id:userId});
+    if (!user) {
       return res.status(401).json({ msg: "Users Not Found" });
     }
-    res.status(200).json(users);
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -138,7 +137,6 @@ async function allUsers(req, res) {
 module.exports = {
   signup,
   login,
-  userDetail,
   userDetails,
   allUsers,
 };
