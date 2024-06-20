@@ -28,7 +28,7 @@ router.post(
 router.post("/login", login);
 
 
-router.get("/", userDetails);
+router.get("/",checkForAuthenticationToken, userDetails);
 
 router.get("/allusers", allUsers);
 

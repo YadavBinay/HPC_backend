@@ -1,0 +1,13 @@
+body{
+    background-color: black;
+    color: rgb(254, 246, 237);
+}
+h1{
+    color: rgb(41, 16, 99);
+}
+hr{
+    color: greenyellow;
+}
+strong{
+    color: aqua;
+}

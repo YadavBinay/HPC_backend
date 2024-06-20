@@ -73,7 +73,7 @@ async function signup(req, res) {
       profilePicture,
     });
   } catch (e) {
-    return res.status(500).json({ msg: "problem to create user",e });
+    return res.status(500).json({ msg: "problem to create user",error:e });
   }
 
   const token = createToken(user);
@@ -109,7 +109,7 @@ async function login(req, res) {
 
 
 async function userDetails(req, res) {
-  const {userId} = req.body;
+  const userId = req.body.user._id;
   if (!userId) res.status(400).json({msg:"pass a userId"})
   try {
     const user = await UserModel.find({_id:userId});
