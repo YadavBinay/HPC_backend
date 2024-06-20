@@ -73,7 +73,7 @@ async function signup(req, res) {
       profilePicture,
     });
   } catch (e) {
-    return res.status(500).json({ msg: "problem to create user" });
+    return res.status(500).json({ msg: "problem to create user",e });
   }
 
   const token = createToken(user);
