@@ -18,7 +18,6 @@ const subscriptionRouterV1 = require("./routes/subscriptionRouterV1");
 const messageRouterV1 = require("./routes/messageRouteV1");
 const reportRouterV1 = require("./routes/reportRoute");
 
-const reportRouterV1 = require("./routes/reportRoute");
 const otpRouteV1 = require("./routes/otpRouteV1.js");
 const { checkForAuthenticationToken } = require("./middlewares/authentication");
 const { connectMongoDb } = require("./connection");
