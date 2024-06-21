@@ -11,6 +11,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const reportDiv = document.querySelector(".report");
   const subscriptionDiv = document.querySelector(".subscription");
 
+const copyToClipboard = (text) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      const alert = document.createElement("div");
+      alert.classList.add("clipboard-alert");
+      alert.innerHTML = `<b>Copied to Clipboard</b><p>${text}</p>`;
+      document.body.appendChild(alert);
+
+      setTimeout(() => {
+        alert.style.opacity = "0";
+        setTimeout(() => {
+          document.body.removeChild(alert);
+        }, 300);
+      }, 1500);
+    })
+    .catch((err) => {
+      console.error("Error copying to clipboard:", err);
+    });
+};
+
+
   try {
     const routes_doc = [
       {
@@ -320,6 +342,16 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (route.type === "SUBSCRIPTION") {
         subscriptionDiv.appendChild(routeDiv);
       }
+    });
+
+    // Add event listener to copy path to clipboard
+    const pathElements = document.querySelectorAll(".path");
+    pathElements.forEach((element) => {
+      element.addEventListener("click", () => {
+        copyToClipboard(
+          "https://hpcbackend-production.up.railway.app" + element.textContent
+        );
+      });
     });
   } catch (error) {
     console.error("Error :", error);
