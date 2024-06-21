@@ -1,7 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const userDiv = document.querySelector(".user");
+  const childDiv = document.querySelector(".child");
+  const doctorDiv = document.querySelector(".doctor");
+  const otpDiv = document.querySelector(".otp");
+  const appointmentDiv = document.querySelector(".appointment");
+  const documentDiv = document.querySelector(".document");
+  const imageDiv = document.querySelector(".image");
+  const chatDiv = document.querySelector(".chat");
+  const paymentDiv = document.querySelector(".payment");
+  const reportDiv = document.querySelector(".report");
+  const subscriptionDiv = document.querySelector(".subscription");
+
   try {
-    const data = [
+    const routes_doc = [
       {
+        type: "USER",
         path: "/api/v1/user/signup",
         method: "POST",
         middleware: [],
@@ -19,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ],
       },
       {
+        type: "USER",
         path: "/api/v1/user/login",
         method: "POST",
         middleware: [],
@@ -26,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["userName", "password"],
       },
       {
+        type: "USER",
         path: "/api/v1/user",
         method: "GET",
         middleware: ["checkForAuthenticationToken"],
@@ -33,12 +48,14 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "USER",
         path: "/api/v1/user/allusers",
         method: "GET",
         middleware: ["just for testing and will be removed"],
         controller: "allUsers",
       },
       {
+        type: "APPOINTMENT",
         path: "/api/v1/appointment",
         method: "POST",
         middleware: ["restrictUserWithoutToken"],
@@ -46,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["doctorId", "date", "time"],
       },
       {
+        type: "APPOINTMENT",
         path: "/api/v1/appointment",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -53,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "APPOINTMENT",
         path: "/api/v1/appointment/complete",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -60,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "APPOINTMENT",
         path: "/api/v1/appointment/future",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -67,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "APPOINTMENT",
         path: "/api/v1/appointment/:id",
         method: "PATCH",
         middleware: ["restrictUserWithoutToken"],
@@ -74,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["id"],
       },
       {
+        type: "CHILD",
         path: "/api/v1/child/addChild",
         method: "POST",
         middleware: ["restrictUserWithoutToken"],
@@ -81,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["firstName", "lastName", "gender", "dateOfBirth"],
       },
       {
+        type: "CHILD",
         path: "/api/v1/child/rootChild",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -88,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "CHILD",
         path: "/api/v1/child/parent/:id",
         method: "GET",
         middleware: [],
@@ -95,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["id"],
       },
       {
+        type: "CHILD",
         path: "/api/v1/child/:id",
         method: "GET",
         middleware: [],
@@ -102,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["id"],
       },
       {
+        type: "DOCTOR",
         path: "/api/v1/doctor",
         method: "POST",
         middleware: [],
@@ -119,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ],
       },
       {
+        type: "DOCTOR",
         path: "/api/v1/doctor/:id",
         method: "POST",
         middleware: [],
@@ -126,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["id"],
       },
       {
+        type: "DOCTOR",
         path: "/api/v1/doctor",
         method: "GET",
         middleware: [],
@@ -133,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "DOCUMENT",
         path: "/api/v1/document",
         method: "POST",
         middleware: ["restrictUserWithoutToken"],
@@ -140,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["document->file", "contentType->mimetype"],
       },
       {
+        type: "DOCUMENT",
         path: "/api/v1/document",
         method: "GET",
         middleware: [],
@@ -147,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "DOCUMENT",
         path: "/api/v1/document/:id",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -154,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["id"],
       },
       {
+        type: "IMAGE",
         path: "/api/v1/image/upload",
         method: "POST",
         middleware: ["restrictUserWithoutToken"],
@@ -161,6 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["childId", "image->file"],
       },
       {
+        type: "CHAT",
         path: "/api/v1/chat/getmessages",
         method: "POST",
         middleware: [],
@@ -168,6 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["senderId", "receiverId"],
       },
       {
+        type: "OTP",
         path: "/api/v1/otp/send-otp",
         method: "POST",
         middleware: [],
@@ -175,6 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["email"],
       },
       {
+        type: "OTP",
         path: "/api/v1/otp/verify-otp",
         method: "POST",
         middleware: [],
@@ -182,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["email", "otp"],
       },
       {
+        type: "PAYMENT",
         path: "/api/v1/payment",
         method: "POST",
         middleware: ["restrictUserWithoutToken"],
@@ -189,6 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["amount", "date", "status"],
       },
       {
+        type: "PAYMENT",
         path: "/api/v1/payment",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -196,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "PAYMENT",
         path: "/api/v1/payment",
         method: "PATCH",
         middleware: ["restrictUserWithoutToken"],
@@ -203,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "REPORT",
         path: "/api/v1/report",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -210,6 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
       {
+        type: "SUBSCRIPTION",
         path: "/api/v1/subscription",
         method: "POST",
         middleware: ["restrictUserWithoutToken"],
@@ -217,6 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: ["planType"],
       },
       {
+        type: "SUBSCRIPTION",
         path: "/api/v1/subscription",
         method: "GET",
         middleware: ["restrictUserWithoutToken"],
@@ -224,31 +265,61 @@ document.addEventListener("DOMContentLoaded", function () {
         parameters: null,
       },
     ];
-    // Parse the JSON data
-    const routes_doc = data;
-
-    // Loop through each route and append to HTML
     routes_doc.forEach((route, index) => {
-      // Create a div element for the route
       const routeDiv = document.createElement("div");
+      routeDiv.classList.add("route");
 
-      // Create HTML content for the route
       const routeContent = `
-        <hr/>
-        <p><strong>Path:</strong> ${route.path}</p>
-        <p><strong>Method:</strong> ${route.method}</p>
-        <p><strong>Middleware:</strong> ${route.middleware?.join(", ")}</p>
-        <p><strong>Parameters:</strong> ${
-          !route.parameters ? "not required" : route.parameters.join(", ")
-        }</p>
+        <div class="route-content">
+            <table>
+                <tbody>
+                    ${Object.entries(route)
+                      .map(([key, value]) => {
+                        if (Array.isArray(value)) {
+                          value = value.join(", ");
+                        }
+                        return `
+                                <tr>
+                                    <td><strong>${key.toLocaleUpperCase()}</strong></td>
+                                    <td>${
+                                      key == "path"
+                                        ? `<code class="path">${value}</code>`
+                                        : value
+                                    }</td>
+                                </tr>
+                            `;
+                      })
+                      .join("")}
+                </tbody>
+            </table>
+        </div>
+`;
 
-      `;
-
-      // Set the HTML content to the route div
       routeDiv.innerHTML = routeContent;
 
-      // Append the route div to the body
-      document.body.appendChild(routeDiv);
+      if (route.type === "USER") {
+        userDiv.appendChild(routeDiv);
+      } else if (route.type === "CHILD") {
+        childDiv.appendChild(routeDiv);
+      } else if (route.type === "DOCTOR") {
+        doctorDiv.appendChild(routeDiv);
+      } else if (route.type === "OTP") {
+        otpDiv.appendChild(routeDiv);
+      } else if (route.type === "APPOINTMENT") {
+        appointmentDiv.appendChild(routeDiv);
+      } else if (route.type === "DOCUMENT") {
+        documentDiv.appendChild(routeDiv);
+      } else if (route.type === "IMAGE") {
+        imageDiv.appendChild(routeDiv);
+      } else if (route.type === "CHAT") {
+        chatDiv.appendChild(routeDiv);
+      } else if (route.type === "PAYMENT") {
+        paymentDiv.appendChild(routeDiv);
+      } else if (route.type === "REPORT") {
+        reportDiv.appendChild(routeDiv);
+      } else if (route.type === "SUBSCRIPTION") {
+        subscriptionDiv.appendChild(routeDiv);
+      }
     });
   } catch (error) {
     console.error("Error :", error);
