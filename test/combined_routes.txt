@@ -1,0 +1,147 @@
+const express = require("express")
+const router = express.Router()
+const { createNewAppointment, getAllAppointMents, completedAppointments, upcomingAppointements, markAppointementCompleted } = require("../controllers/appointment")
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+router.use(restrictUserWithoutToken)
+router.post("/", createNewAppointment)
+router.get("/", getAllAppointMents)
+router.get("/complete", completedAppointments)
+router.get("/future", upcomingAppointements)
+router.patch("/:id", markAppointementCompleted)
+module.exports = router
+
+const { Router } = require('express');
+const { addChild, childDetail, getChildByParentId, getRootChild } = require("../controllers/child");
+const { restrictUserWithoutToken } = require('../middlewares/authentication');
+
+const router = Router();
+
+router.post('/addChild', restrictUserWithoutToken, addChild);
+router.get("/rootChild", restrictUserWithoutToken, getRootChild)
+router.get("/parent/:id", getChildByParentId)
+router.get('/:id', childDetail);
+
+
+
+
+module.exports = router;
+
+const express = require("express")
+const router = express.Router()
+const { createDoctor, getDoctorById, getAllDoctors } = require("../controllers/doctor")
+const {upload , permanentStorage , doctorUploadDir} = require('../middlewares/imageUpload')
+// const { restrictUserWithoutToken } = require("../middlewares/authentication")
+// router.use(restrictUserWithoutToken)
+router.post(
+  "/",
+  upload(permanentStorage(doctorUploadDir)).single("profilePicture"),
+  createDoctor
+);
+router.post("/:id", getDoctorById)
+router.get("/", getAllDoctors)
+module.exports = router
+
+const express = require("express")
+const router = express.Router()
+const { createDocument, getAllDocuments, getDocumentById } = require("../controllers/document")
+const { upload } = require("../middlewares/imageUpload")
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+router.post("/", upload().single("document"), restrictUserWithoutToken, createDocument)
+router.get("/", getAllDocuments)
+router.get("/:id", restrictUserWithoutToken, getDocumentById)
+module.exports = router;
+
+const express = require("express")
+const router = express.Router()
+const { upload } = require("../middlewares/imageUpload")
+const { uploadImage } = require("../controllers/image")
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+// router.post("/upload", upload.single("image"), restrictUserWithoutToken, uploadImage)
+router.post("/upload", upload.single("image"), restrictUserWithoutToken, uploadImage)
+module.exports = router
+
+
+const express = require('express');
+const auth = require('../middlewares/authentication')
+const router = express.Router();
+const { getMessagesBetweenUsers } = require('../controllers/messageController');
+
+router.post('/getmessages', getMessagesBetweenUsers);
+
+module.exports = router;
+
+
+const { Router } = require("express");
+const { sendOtp, verifyOtp } = require("../controllers/otp");
+const router = Router();
+
+router.post("/send-otp", sendOtp);
+router.post("/verify-otp",verifyOtp);
+
+module.exports = router
+
+const { createPayment, updatePayment, getPayment } = require("../controllers/payment")
+const express = require('express')
+const router = express.Router()
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+router.use(restrictUserWithoutToken)
+router.post("/", createPayment)
+router.get("/", getPayment)
+router.patch("/", updatePayment)
+module.exports = router
+
+
+const express = require("express")
+const router = express.Router()
+const { getReports } = require("../controllers/report")
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+// router.use(restrictUserWithoutToken)
+router.get("/", getReports)
+module.exports = router
+
+const express = require('express')
+const router = express.Router()
+const { restrictUserWithoutToken } = require("../middlewares/authentication")
+const { createSubscription, getSubscriptions } = require("../controllers/subscription")
+router.use(restrictUserWithoutToken)
+router.post("/", createSubscription)
+router.get("/", getSubscriptions)
+module.exports = router
+
+
+const { Router } = require("express");
+const {
+  signup,
+  login,
+  userDetail,
+  addChild,
+  userDetails,
+  allUsers,
+} = require("../controllers/user");
+const {
+  checkForAuthenticationToken,
+} = require("../middlewares/authentication");
+
+const {
+  upload,
+  permanentStorage,
+  userUploadDir,
+} = require("../middlewares/imageUpload");
+
+const router = Router();
+
+router.post(
+  "/signup",
+  upload(permanentStorage(userUploadDir)).single("profilePicture"),
+  signup
+); // add user or parent
+
+router.post("/login", login);
+
+router.get("/user", userDetail);
+
+router.get("/", userDetails);
+
+router.get("/allusers", allUsers);
+
+module.exports = router;

@@ -1,0 +1,763 @@
+
+const appointmentModel = require("../models/appointmentModel")
+const doctorModel = require("../models/doctorModel")
+const createNewAppointment = async (req, res) => {
+    try {
+        // const appointmentDate = new Date(date).toISOString();
+        const { doctorId, date, time } = req.body
+        const userId = req.body.user._id
+        const doctor = await doctorModel.findById({ _id: doctorId })
+        if (!doctor.available) {
+            return res.status(400).json({ "message": "Doctor is not Available" })
+        }
+        const appointment = await appointmentModel.create({ doctorId, userId, time, date })
+        res.status(200).json(appointment)
+    }
+    catch (error) {
+        res.status(500).json(error.message)
+
+    }
+
+}
+const getAllAppointMents = async (req, res) => {
+    try {
+        const appointments = await appointmentModel.find({})
+        res.status(200).json(appointments);
+    }
+    catch (error) {
+        res.status(500).json(error.message)
+    }
+}
+const completedAppointments = async (req, res) => {
+    try {
+        const appointments = await appointmentModel.find({ state: true })
+        if (appointments.length == 0) {
+            return res.status(200).json({ "message": "No Appointments Completed Yet" })
+        }
+        res.status(200).json({ "message": "Completed Appointments", appointments })
+    }
+    catch (error) {
+        res.status(500).json({ "message": "Error while Fetching CompletedAppointments ", error })
+
+    }
+
+}
+const upcomingAppointements = async (req, res) => {
+    try {
+        const appointments = await appointmentModel.find({ state: false })
+        if (appointments.length == 0) {
+            return res.status(200).json({ "message": "No future Appointments" })
+        }
+        res.status(200).json(appointments)
+    }
+    catch (error) {
+        res.status(500).json({ "message": "Error While Fetching FutureAppointments", error })
+    }
+}
+const markAppointementCompleted = async (req, res) => {
+    try {
+        const { id } = req.params
+        const appointment = await appointmentModel.findByIdAndUpdate({ _id: id }, { state: true })
+        res.status(200).json({ "message": "Appointemet is Completed Successfully", appointment })
+    }
+    catch (error) {
+        res.status(500).json({ "message": "Error While Updating Appointment" })
+
+    }
+}
+module.exports = { createNewAppointment, getAllAppointMents, completedAppointments, upcomingAppointements, markAppointementCompleted }
+
+const UserModel = require('../models/userModel');
+const ChildModel = require('../models/childModel');
+
+
+async function addChild(req, res) {
+  if (!req.body.user) return res.status(401).json({ msg: "Unauthorized" });
+  const { firstName, lastName, gender, dateOfBirth } = req.body;
+  // Define required fields
+  const requiredFields = ["firstName", "lastName", "gender", "dateOfBirth"];
+
+  // Function to validate the request body
+  function validateRequestBody(reqBody, requiredFields) {
+    return requiredFields.filter(field => {
+      if (typeof reqBody[field] === 'number') {
+        return isNaN(reqBody[field]);
+      } else {
+        return !reqBody[field] || reqBody[field].trim() === "";
+      }
+    });
+  }
+
+  // Validate the request body
+  const missingFields = validateRequestBody(req.body, requiredFields);
+  if (missingFields.length > 0) {
+    return res.status(400).json({
+      msg: `Missing or empty fields: ${missingFields.join(', ')}`
+    });
+  }
+
+  try {
+    child = await ChildModel.create({
+      firstName: firstName,
+      lastName: lastName,
+      userId: req.body.user._id,
+      gender: gender,
+      dateOfBirth: new Date(dateOfBirth), //  dateOfBirth is a string like '27 Oct 2004' 
+    });
+    // parent = await UserModel.findOne({ _id: req.body.user._id});
+    // parent.childList.push( child._id);
+    // parent.save();
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ msg: 'problem to create child' });
+  }
+  return res.status(200).json({ msg: 'Child created', childId: child._id });
+}
+
+async function childDetail(req, res) {
+  if (req.params.id.trim() === "") return res.status(401).json({ msg: "Give valid params" });
+  const child = await ChildModel.findOne({ _id: req.params.id });
+  return res.status(200).json({ data: child });
+}
+const getChildByParentId = async (req, res) => {
+  try {
+    const { id } = req.params
+    const children = await ChildModel.find({ userId: id })
+    const numberOfChildren = children.length
+    if (numberOfChildren == 0) {
+      return res.status(200).json({ "message": "Parent Has No Children" })
+
+    }
+    if (!children) {
+      return res.status(500).json({ "message": "Children Not Found" })
+    }
+    res.status(200).json(children)
+  }
+  catch (error) {
+    res.status(500).json(error)
+
+  }
+
+}
+const getRootChild = async (req, res) => {
+  try {
+    const userId = req.body.user._id
+    const children = await ChildModel.find({ userId })
+    if (!children) {
+      return res.status(401).json({ "message": "Children is Not Created for the user" })
+    }
+    res.status(200).json(children)
+
+
+  }
+  catch (error) {
+    res.status(500).json(error)
+
+  }
+}
+
+module.exports = {
+  addChild,
+  childDetail,
+  getChildByParentId,
+  getRootChild
+};
+
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+const doctorModel = require("../models/doctorModel");
+
+const createDoctor = async (req, res) => {
+  try {
+    // const { name, specialization, available } = req.body;
+    const {
+      name,
+      specialization,
+      available,
+      location,
+      contactNumber,
+      email,
+      experience,
+      education,
+      bio,
+    } = req.body;
+
+    // Handle file upload
+    let profilePicture = "";
+    if (req.file) {
+      profilePicture = path.join(uploadDir, req.file.filename);
+    }
+
+    const doctor = await doctorModel.create({
+      name,
+      specialization,
+      location,
+      available,
+      profilePicture,
+      contactNumber,
+      email,
+      experience,
+      education,
+      bio,
+    });
+    res.status(201).json(doctor);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getDoctorById = async (req, res) => {
+  console.log("Fetching doctor by ID from URL parameter");
+  try {
+    const { id } = req.params;
+    console.log("Received ID:", id);
+    if (!id) {
+      return res.status(400).json({ msg: "ID parameter is required" });
+    }
+
+    const doctor = await doctorModel.findById(id);
+    console.log("Doctor found:", doctor);
+    if (!doctor) {
+      return res.status(404).json({ msg: "Doctor not found" });
+    }
+
+    res.status(200).json(doctor);
+  } catch (error) {
+    console.error("Error fetching doctor by ID:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getAllDoctors = async (req, res) => {
+  console.log("Fetching all doctors");
+  try {
+    const doctors = await doctorModel.find({});
+    res.status(200).json(doctors);
+  } catch (error) {
+    console.error("Error fetching all doctors:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createDoctor, getDoctorById, getAllDoctors };
+
+
+const documentModel = require("../models/documentModel")
+const createDocument = async (req, res) => {
+    try {
+        const userId = req.body.user._id
+        const filename = req.file.originalname
+        const data = req.file.buffer
+        const contentType = req.file.mimetype
+        const document = await documentModel.create({ userId, filename, data, contentType })
+        if (!document) {
+            return res.status(500).json("Document not Uploaded Succefully")
+
+        }
+        res.status(200).json("Document  Uploaded Succefully")
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}
+const getDocumentById = async (req, res) => {
+    try {
+        // const userId = "6652b3681c1e413b68ce83f0";
+        const { id } = req.params
+        const document = await documentModel.findById({ _id: id })
+        // const { data, __docs } = documents;
+        res.status(200).json(document)
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}
+const getAllDocuments = async (req, res) => {
+    try {
+        const documents = await documentModel.find({})
+        // const { data, __docs } = documents;
+        res.status(200).json(documents)
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}
+module.exports = { createDocument, getAllDocuments, getDocumentById }
+
+const imageModel = require("../models/image")
+const reportModel = require("../models/reportModel")
+const mlPrediction = require("./ml")
+const uploadImage = async (req, res) => {
+    try {
+        const { childId } = req.body;
+        const userId = req.body.user._id
+        // console.log(userId)
+        // console.log(childId)
+        if (!req.file) {
+            return res.status(500).json({ "message": "Image not Uploaded" })
+        }
+        const image = await imageModel.create({ data: req.file.buffer, contentType: req.file.mimetype, userId, childId })
+        if (!image) {
+            return res.status(500).json("image not uploaded")
+        }
+        // console.log("Buffer", req.file)
+        const reportValue = await mlPrediction.prediction(image.data)
+        const report = await reportModel.create({ value: reportValue, userId, childId })
+        if (!report) {
+            return res.status(500).json("report is not generated")
+        }
+        res.json({
+            report: report,
+            image: {
+                data: image.data,
+                contentType: image.contentType
+            }
+        });
+    }
+    catch (error) {
+        res.status(500).json(error.message)
+    }
+}
+module.exports = { uploadImage }
+
+const mongoose = require("mongoose");
+const Message = require("../models/message");
+
+exports.getMessagesBetweenUsers = async (req, res) => {
+    const { senderId, receiverId } = req.body;
+    
+    console.log(`receiverId: ${receiverId}, senderId: ${senderId}`);
+    if (!senderId || !receiverId) {
+        return res
+            .status(400)
+            .json({ error: "senderId and receiverId are required" });
+    }
+
+    try {
+        const messages = await Message.find({
+            $or: [
+                { senderId: senderId, receiverId: receiverId },
+                { senderId: receiverId, receiverId: senderId }
+            ]
+        }).sort({ createdAt: 1 });
+
+        if (!messages || messages.length === 0) {
+            console.log("No messages found");
+            return res.status(404).json({ msg: "No messages found" });
+        } else {
+            console.log("Messages found:", messages);
+            return res.status(200).json(messages);
+        }
+    } catch (error) {
+        console.error("Error fetching messages:", error);
+        return res.status(500).json({
+            msg: "An error occurred while fetching messages",
+            error: error.message,
+        });
+    }
+};
+
+
+const tf = require('@tensorflow/tfjs');
+const tfnode = require("@tensorflow/tfjs-node")
+const fs = require('fs');
+const path = require('path');   
+// const mongoose = require("mongoose")
+// const imageModel = require("../models/image")
+// const url = "mongodb+srv://ayushvadodariya12:xYGAJH6cO9Ks1FQq@cluster0.d9xtewg.mongodb.net/hpc?retryWrites=true&w=majority&appName=Cluster0"
+
+function nodeBundleResourceIO(modelJsonPath, weightPaths) {
+    return {
+        load: async function () {
+            const modelJson = JSON.parse(fs.readFileSync(modelJsonPath, 'utf-8'));
+            const weightSpecs = modelJson.weightsManifest[0].weights;
+            const weightData = new Uint8Array(weightPaths.reduce((acc, weightPath) => {
+                const weightBuffer = fs.readFileSync(weightPath);
+                const newArray = new Uint8Array(acc.length + weightBuffer.byteLength);
+                newArray.set(acc, 0);
+                newArray.set(new Uint8Array(weightBuffer), acc.length);
+                return newArray;
+            }, new Uint8Array()));
+
+            return {
+                modelTopology: modelJson.modelTopology,
+                weightSpecs,
+                weightData: weightData.buffer,
+            };
+        },
+    };
+}
+
+const loadModel = async () => {
+    await tf.ready();
+    const modelJsonPath = path.resolve(__dirname, 'jsModelFinal', 'model.json');
+    const weightsDir = path.resolve(__dirname, 'jsModelFinal');
+    const weightFiles = fs.readdirSync(weightsDir).filter(file => file.endsWith('.bin')).map(file => path.join(weightsDir, file));
+
+    try {
+        const model = await tf.loadLayersModel(nodeBundleResourceIO(modelJsonPath, weightFiles));
+        // model.summary();
+        return model
+    } catch (error) {
+        console.error('Error loading the model:', error);
+    }
+};
+function preprocessImage(buffer) {
+    // Decode image buffer to tensor
+    const imageTensor = tfnode.node.decodeImage(buffer, 3);
+
+    // Resize image to the required size for the model (e.g., 224x224)
+    const resizedImage = tfnode.image.resizeBilinear(imageTensor, [64, 64]);
+
+    // Normalize the image (if required by your model)
+    const normalizedImage = resizedImage.div(tfnode.scalar(255));
+
+    // Add a batch dimension (required for prediction)
+    const batchedImage = normalizedImage.expandDims(0);
+
+    return batchedImage;
+}
+const prediction = async (buffer) => {
+    try {
+        // const image = await imageModel.findById({ _id: "6653faa3f488fd3a15158ca5" })
+        const inputTensor = preprocessImage(buffer);
+        const model = await loadModel();
+        const prediction = model.predict(inputTensor);
+        const predictedClass = prediction.argMax(-1).dataSync()[0];
+        return predictedClass
+
+    }
+    catch (error) {
+        throw new Error("Report Not Generated")
+    }
+}
+module.exports = { prediction }
+
+
+require("dotenv").config();
+const nodemailer = require("nodemailer");
+
+//oAuth 2 setup
+
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     type: "OAuth2",
+//     user: process.env.EMAIL,
+//     clientId: process.env.OAUTH_CLIENT_ID,
+//     clientSecret: process.env.OAUTH_CLIENT_SECRET,
+//     refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+//     accessToken: process.env.OAUTH_ACCESS_TOKEN,
+//   },
+// });
+
+//simple mail transfer protocol setup smtp
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.user, // replace with your email
+    pass: process.env.password, // replace with your email password
+  },
+});
+
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+};
+
+const otps = {};
+
+//send otp route function
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+  const otp = generateOTP();
+  otps[email] = otp.toString();
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: "Your OTP Code",
+    text: `Your OTP code is ${otp}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ message: "Error sending OTP" });
+  }
+};
+
+// Endpoint to verify OTP function
+const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (otps[email] === otp) {
+    delete otps[email]; // Remove OTP after verification
+    res.status(200).json({ message: "OTP verified successfully" });
+  } else {
+    res.status(400).json({ message: "Invalid OTP" });
+  }
+};
+
+module.exports = { sendOtp, verifyOtp };
+
+
+const paymentModel = require("../models/paymentModel")
+const createPayment = async (req, res) => {
+    try {
+        const userId = req.body.user._id
+        const { amount, date, status } = req.body;
+        const payment = await paymentModel.create({ userId, amount, date, status })
+        res.status(200).json(payment);
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+}
+const getPayment = async (req, res) => {
+    try {
+        const userId = req.body.user._id
+        const payment = await paymentModel.find({ userId })
+        res.status(200).json(payment)
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+
+}
+const updatePayment = async (req, res) => {
+    try {
+        const userId = req.body.user._id
+        const updatedPayment = await paymentModel.findOneAndUpdate({ userId }, { ...req.body })
+        res.status(500).json(updatedPayment)
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+}
+module.exports = { createPayment, updatePayment, getPayment }
+
+const reportModel = require("../models/reportModel")
+const getReports = async (req, res) => {
+    try {
+        const userId = req.body.user._id
+        const reports = await reportModel.find({ userId })
+        if (!reports) {
+            return res.status(200).json({ "message": "Reports Not Generated" })
+        }
+        res.status(200).json(reports)
+    }
+    catch (error) {
+        res.status(500).json(error)
+
+    }
+}
+module.exports = { getReports }
+
+const subscriptionModel = require("../models/subscription")
+const stripe = require("stripe")
+const plans = {
+    basic: {
+        duration: 30,
+        price: 1000,
+        features: ['Feature1', 'Feature2'],
+    },
+    professional: {
+        duration: 365,
+        price: 10000,
+        features: ['Feature1', 'Feature2', 'Feature3'],
+    },
+    professionalPulse: {
+        duration: 365,
+        price: 10000,
+        features: ['Feature1', 'Feature2', 'Feature3'],
+    },
+    professionalAdvance: {
+        duration: 365,
+        price: 10000,
+        features: ['Feature1', 'Feature2', 'Feature3'],
+    }
+};
+const createSubscription = async (req, res) => {
+    try {
+        const userId = req.body.user._id
+        const { planType } = req.body
+        if (!plans[planType]) {
+            return res.status(400).json({ message: 'Invalid plan type' });
+        }
+        const plan = plans[planType]
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + plan.duration);
+        const subscription = await subscriptionModel.create({ userId, plan: planType, features: plan.features, endDate })
+        if (!subscription) {
+            return res.status(500).json("Subscription Error")
+
+        }
+        console.log(subscription)
+
+        res.status(200).json({ subscription })
+    }
+    catch (error) {
+        res.status(500).json(error)
+
+    }
+}
+const getSubscriptions = async (req, res) => {
+    const userId = req.body.user._id
+    try {
+        const subscriptions = await subscriptionModel.find({ userId });
+        res.status(200).json(subscriptions);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving subscriptions', error });
+    }
+};
+module.exports = { createSubscription, getSubscriptions }
+
+
+const bcrypt = require("bcrypt");
+
+const UserModel = require("../models/userModel");
+const childModel = require("../models/childModel");
+
+const { createToken } = require("../services/authentication");
+const ChildModel = require("../models/childModel");
+
+async function signup(req, res) {
+  const {
+    email,
+    userName,
+    password,
+    phoneNumber,
+    gender,
+    dateOfBirth,
+    maritalStatus,
+    state,
+  } = req.body;
+  // Define required fields
+  const requiredFields = [
+    "userName",
+    "email",
+    "password",
+    "phoneNumber",
+    "gender",
+    "dateOfBirth",
+    "maritalStatus",
+    "state",
+  ];
+
+  // Function to validate the request body
+  function validateRequestBody(reqBody, requiredFields) {
+    return requiredFields.filter((field) => {
+      if (typeof reqBody[field] === "number") {
+        return isNaN(reqBody[field]);
+      } else {
+        return !reqBody[field] || reqBody[field].trim() === "";
+      }
+    });
+  }
+
+  // Validate the request body
+  const missingFields = validateRequestBody(req.body, requiredFields);
+  if (missingFields.length > 0) {
+    return res.status(400).json({
+      msg: `Missing or empty fields: ${missingFields.join(", ")}`,
+    });
+  }
+  let user = await UserModel.findOne({ phoneNumber });
+  let user1 = await UserModel.findOne({ userName });
+
+  if (user)
+    return res.status(404).json({ msg: "This phoneNumber is already used" });
+  if (user1)
+    return res.status(404).json({ msg: "This userName is already used" });
+  try {
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    let profilePicture = "";
+    if (req.file) {
+      profilePicture = path.join(uploadDir, req.file.filename);
+    }
+    user = await UserModel.create({
+      email: email,
+      userName: userName.toLowerCase(),
+      phoneNumber: phoneNumber,
+      password: hashedPassword,
+      gender: gender,
+      dateOfBirth: new Date(dateOfBirth), //  dateOfBirth is a string like '27 Oct 2004'
+      maritalStatus: maritalStatus,
+      state: state,
+      profilePicture,
+    });
+  } catch (e) {
+    return res.status(500).json({ msg: "problem to create user",e });
+  }
+
+  const token = createToken(user);
+
+  return res
+    .status(200)
+    .json({ msg: "User created", token, userName, userId: user._id });
+}
+
+async function login(req, res) {
+  const { userName, password } = req.body;
+  if (!userName) {
+    return res.status(404).json({ msg: "Enter UserName" });
+  }
+  if (!password) {
+    return res.status(404).json({ msg: "Enter Password" });
+  }
+  const user = await UserModel.findOne({ userName: userName.toLowerCase() });
+
+  if (!user)
+    return res
+      .status(404)
+      .json({ msg: "User not found with this phoneNumber" });
+
+  const comparPassword = await bcrypt.compare(password, user.password);
+
+  // if (password !== user.password) return res.status(401).json({ msg: 'Wrong password' });
+  if (!comparPassword) return res.status(401).json({ msg: "Wrong password" });
+
+  const token = createToken(user);
+  return res.status(200).json({ token, userName, userId: user._id });
+}
+
+async function userDetail(req, res) {
+  if (!req.body.user) return res.status(401).json({ msg: "Unauthorized" });
+  return res.json({ data: req.body.user });
+}
+async function userDetails(req, res) {
+  try {
+    const users = await UserModel.find({});
+    if (!users) {
+      return res.status(401).json({ msg: "Users Not Found" });
+    }
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
+
+async function allUsers(req, res) {
+  try {
+    const users = await UserModel.find({});
+    if (!users) {
+      return res.status(401).json({ msg: "Users Not Found" });
+    }
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
+
+module.exports = {
+  signup,
+  login,
+  userDetail,
+  userDetails,
+  allUsers,
+};
