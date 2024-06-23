@@ -56,20 +56,13 @@ app.use("/api/v1/otp", otpRouteV1);
 // Protected routes
 app.use("/api/v1/child", checkForAuthenticationToken(), childRouterV1);
 // app.use("/api/v1/image", checkForAuthenticationToken(), imageRouterV1);
-app.use(
-  "/api/v1/appointment",
-  checkForAuthenticationToken(),
-  appointmentRouterV1
-);
+app.use("/api/v1/appointment", checkForAuthenticationToken(),appointmentRouterV1);
+
 // , checkForAuthenticationToken()
 app.use("/api/v1/doctor", doctorRouterV1);
 app.use("/api/v1/document", checkForAuthenticationToken(), documentRouterV1);
 app.use("/api/v1/payment", checkForAuthenticationToken(), paymentRouterV1);
-app.use(
-  "/api/v1/subscription",
-  checkForAuthenticationToken(),
-  subscriptionRouterV1
-);
+app.use("/api/v1/subscription", checkForAuthenticationToken(), subscriptionRouterV1);
 // app.use("/api/v1/report", checkForAuthenticationToken(), reportRouterV1);
 app.use("/api/v1/chat", checkForAuthenticationToken(), messageRouterV1);
 
