@@ -1,24 +1,24 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const path = require("path");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const path = require('path');
 const app = express();
-require("dotenv").config();
+require('dotenv').config();
 const {
   upload,
   permanentStorage,
   userUploadDir,
-} = require("../middlewares/imageUpload");
-const bodyParser = require("body-parser");
-const { connectMongoDb } = require("../connection");
+} = require('../middlewares/imageUpload');
+const bodyParser = require('body-parser');
+const { connectMongoDb } = require('../Connection/mongoDbConnection');
 
 // Connection
 connectMongoDb(process.env.MONGO_CONNECTION_URL).then(() =>
-  console.log("Mongodb connected")
+  console.log('Mongodb connected')
 );
 
 const UserModel = mongoose.model(
-  "testuser",
+  'testuser',
   mongoose.Schema({
     name: {
       type: String,
@@ -38,12 +38,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Serve static files from the uploads directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ensure you provide a single file upload middleware
 app.post(
-  "/",
-  upload(permanentStorage(userUploadDir)).single("profilePicture"),
+  '/',
+  upload(permanentStorage(userUploadDir)).single('profilePicture'),
   async (req, res) => {
     try {
       const { name } = req.body;
@@ -62,22 +62,22 @@ app.post(
 );
 
 // Endpoint to list all users and show their profile picture
-app.get("/", async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     const users = await UserModel.find({});
     let userList = users
-      .map((user) => {
+      .map(user => {
         const profileUrl = `http://localhost:4000/${user.profile}`;
         return `<div>
                 <p>${user.name}</p>
                 <img src="${profileUrl}" alt="Profile Picture" style="width:150px;height:150px;">
               </div>`;
       })
-      .join("");
+      .join('');
     res.send(`<div>${userList}</div>`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(4000, () => console.log("Server running on port 4000 🏦"));
+app.listen(4000, () => console.log('Server running on port 4000 🏦'));

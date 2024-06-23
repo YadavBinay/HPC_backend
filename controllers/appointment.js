@@ -1,5 +1,7 @@
 const appointmentModel = require("../models/appointmentModel")
 const doctorModel = require("../models/doctorModel")
+const scheduleAppointment = require("./scheduler")
+
 const createNewAppointment = async (req, res) => {
     try {
         // const appointmentDate = new Date(date).toISOString();
@@ -10,6 +12,7 @@ const createNewAppointment = async (req, res) => {
             return res.status(400).json({ "message": "Doctor is not Available" })
         }
         const appointment = await appointmentModel.create({ doctorId, userId, time, date })
+        scheduleAppointment(appointment);
         res.status(200).json(appointment)
     }
     catch (error) {

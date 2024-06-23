@@ -1,0 +1,753 @@
+{
+  "info": {
+    "_postman_id": "c3eb6d68-7e0e-4e1d-b9aa-68224903b9a9",
+    "name": "Healthcare Backend APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User Endpoints",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "userName",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "phoneNumber",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "gender",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "dateOfBirth",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "maritalStatus",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "profilePicture",
+                  "src": "",
+                  "type": "file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/user/signup",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "user", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "userName",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/user/login",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "user", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/user",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/user/allusers",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "user", "allusers"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointment Endpoints",
+      "item": [
+        {
+          "name": "Create New Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "doctorId",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "time",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/appointment",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "appointment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Appointments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/appointment",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "appointment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Completed Appointments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/appointment/complete",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "appointment", "complete"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Upcoming Appointments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/appointment/future",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "appointment", "future"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Appointment Completed",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/appointment/:id",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "appointment", ":id"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Child Endpoints",
+      "item": [
+        {
+          "name": "Add Child",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "firstName",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "lastName",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "gender",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "dateOfBirth",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/child/addChild",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "child", "addChild"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Root Child",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/child/rootChild",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "child", "rootChild"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Child By Parent ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/child/parent/:id",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "child", "parent", ":id"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Child Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/child/:id",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "child", ":id"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doctor Endpoints",
+      "item": [
+        {
+          "name": "Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "specialization",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "available",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "location",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "contactNumber",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "experience",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "education",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "bio",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/doctor",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "doctor"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Doctor By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/doctor/:id",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "doctor", ":id"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/doctor",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "doctor"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Document Endpoints",
+      "item": [
+        {
+          "name": "Create Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document",
+                  "src": "",
+                  "type": "file"
+                },
+                {
+                  "key": "contentType",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/document",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "document"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/document",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "document"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/document/:id",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "document", ":id"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Image Endpoints",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "childId",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "src": "",
+                  "type": "file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/image/upload",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "image", "upload"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chat Endpoints",
+      "item": [
+        {
+          "name": "Get Messages Between Users",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "senderId",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "receiverId",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/chat/getmessages",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "chat", "getmessages"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "OTP Endpoints",
+      "item": [
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/otp/send-otp",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "otp", "send-otp"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "otp",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/otp/verify-otp",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "otp", "verify-otp"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment Endpoints",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "amount",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/payment",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "payment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/payment",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "payment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Payment",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata"
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/payment",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "payment"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Report Endpoints",
+      "item": [
+        {
+          "name": "Get Reports",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/report",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "report"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subscription Endpoints",
+      "item": [
+        {
+          "name": "Create Subscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "planType",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/subscription",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "subscription"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://hpcbackend-production.up.railway.app/api/v1/subscription",
+              "protocol": "https",
+              "host": ["hpcbackend-production", "up", "railway", "app"],
+              "path": ["api", "v1", "subscription"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
