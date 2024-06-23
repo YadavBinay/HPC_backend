@@ -96,7 +96,7 @@ async function login(req, res) {
   if (!user)
     return res
       .status(404)
-      .json({ msg: "User not found with this phoneNumber" });
+      .json({ msg: "User not found with this userName" });
 
   const comparPassword = await bcrypt.compare(password, user.password);
 
@@ -109,19 +109,21 @@ async function login(req, res) {
 
 
 async function userDetails(req, res) {
-  const userId = undefined;
-  if(req.body.user) userId = req.body.user._id;
-  if (!userId) res.status(400).json({msg:"pass a userId"})
+  let userId = req.body.user ? req.body.user._id : undefined;
+  if (!userId) {
+    return res.status(400).json({ msg: 'Pass a userId' });
+  }
   try {
-    const user = await UserModel.find({_id:userId});
+    const user = await UserModel.findById(userId);
     if (!user) {
-      return res.status(401).json({ msg: "Users Not Found" });
+      return res.status(401).json({ msg: 'User Not Found' });
     }
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);
   }
 }
+
 
 async function allUsers(req, res) {
   try {

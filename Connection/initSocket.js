@@ -1,7 +1,7 @@
 // initSocket.js
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
-
+const socketidToUserIdlMap = new Map();
 function initializeSocket(server) {
   const io = new Server(server, {
     allowEIO3: true,
