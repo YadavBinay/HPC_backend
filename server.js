@@ -9,7 +9,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 const { connectMongoDb } = require('./Connection/mongoDbConnection.js');
 
-
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -31,7 +30,9 @@ app.use(cors());
 // Logging middleware
 app.use((req, res, next) => {
   const msg = `${req.method} \ ${req.url} ${req.hostname} ${Date.now()}\n`;
-  fs.appendFile('log.txt', msg, () => {});
+  fs.appendFile('log.txt', msg, () => {
+    console.log(msg);
+  });
   next();
 });
 
