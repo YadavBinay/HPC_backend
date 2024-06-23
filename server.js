@@ -18,7 +18,7 @@ connectMongoDb(process.env.MONGO_CONNECTION_URL).then(() =>
 );
 
 // Ensure Message model is registered
-require('./models/message');
+require('./models/messageModel.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,11 +49,7 @@ configureRoutes(app);
 const server = app.listen(PORT, () => console.log(`Running on port ${PORT}`));
 
 // Initialize Socket.io
-const {
-  initializeSocket,
-  emailToSocketIdMap,
-  socketidToEmailMap,
-} = require('./socket');
+const initializeSocket = require('./Connection/initSocket.js');
 const io = initializeSocket(server);
 
-module.exports = { io, emailToSocketIdMap, socketidToEmailMap };
+module.exports = { io };

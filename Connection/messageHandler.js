@@ -1,7 +1,7 @@
 // messageHandler.js
 const mongoose = require('mongoose');
-const Message = mongoose.model('Message');
-const User = mongoose.model('User');
+const Message = require('../models/messageModel');
+const User = require('../models/userModel');
 
 module.exports = (io, socket) => {
   socket.on('sendMessage', async ({ receiverId, message }) => {

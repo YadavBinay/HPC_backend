@@ -109,7 +109,8 @@ async function login(req, res) {
 
 
 async function userDetails(req, res) {
-  const userId = req.body.user._id;
+  const userId = undefined;
+  if(req.body.user) userId = req.body.user._id;
   if (!userId) res.status(400).json({msg:"pass a userId"})
   try {
     const user = await UserModel.find({_id:userId});

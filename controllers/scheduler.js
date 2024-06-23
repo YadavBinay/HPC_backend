@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const cron = require('node-cron');
 const appointmentModel = require('../models/appointmentModel'); // Adjust the path as necessary
-const { io, emailToSocketIdMap } = require('../app'); // Adjust the path as necessary
+const { io, emailToSocketIdMap } = require('../Connection/initSocket'); // Adjust the path as necessary
 
 async function scheduleAppointment(appointment) {
   try {

@@ -148,3 +148,12 @@ GET  /api/v1/user/ localhost 1719130752421
 GET  /api/v1/user/ localhost 1719130781095
 GET  /api/v1/user/ localhost 1719130916830
 POST  /api/v1/user/signup localhost 1719131035645
+POST  /api/v1/user/login localhost 1719141440236
+GET  /api/v1/child/rootChild localhost 1719141441149
+GET  /api/v1/child/rootChild localhost 1719141466306
+POST  /api/v1/child/addChild localhost 1719141510651
+GET  /api/v1/child/rootChild localhost 1719141523283
+GET  /api/v1/child/rootChild localhost 1719141585606
+POST  /api/v1/user/signup localhost 1719141702368
+GET  /api/v1/child/rootChild localhost 1719141703844
+POST  /api/v1/child/addChild localhost 1719141954309
