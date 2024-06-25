@@ -1,10 +1,10 @@
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // Define upload directories for doctors and users
-const doctorUploadDir = path.join("uploads", "images", "doctors");
-const userUploadDir = path.join("uploads", "images", "users");
+const doctorUploadDir = path.join('uploads', 'images', 'doctors');
+const userUploadDir = path.join('uploads', 'images', 'users');
 
 // Ensure the directory exists
 if (!fs.existsSync(doctorUploadDir)) {
@@ -16,13 +16,14 @@ if (!fs.existsSync(userUploadDir)) {
 
 const tempStorage = multer.memoryStorage();
 
-const permanentStorage = (uploadDir) =>
+const permanentStorage = uploadDir =>
   multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
+      const { userId } = req.body;
+      cb(null, `${userId+"-"+file.originalname}`);
     },
   });
 

@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const {
   signup,
   login,
@@ -6,30 +6,32 @@ const {
   addChild,
   userDetails,
   allUsers,
-} = require("../controllers/user");
+  uploadProfilePic,
+  getProfilePic,
+} = require('../controllers/user');
 const {
   checkForAuthenticationToken,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
 const {
   upload,
   permanentStorage,
   userUploadDir,
-} = require("../middlewares/imageUpload");
+} = require('../middlewares/imageUpload');
 
 const router = Router();
 
+router.post('/signup', signup); // add user or parent
 router.post(
-  "/signup",
-  upload(permanentStorage(userUploadDir)).single("profilePicture"),
-  signup
-); // add user or parent
+  '/image',
+  upload(permanentStorage(userUploadDir)).single('profilePicture'),
+  uploadProfilePic
+);
+router.post('/login', login);
 
-router.post("/login", login);
+router.get('/', checkForAuthenticationToken(), userDetails);
 
-
-router.get("/",checkForAuthenticationToken(), userDetails);
-
-router.get("/allusers", allUsers);
+router.get('/allusers', allUsers);
+router.post('/getprofilepic', getProfilePic);
 
 module.exports = router;

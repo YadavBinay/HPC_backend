@@ -24,7 +24,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+
+// Serve static files from the 'public' directory
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve user-uploaded images from the 'uploads/images/users' directory
+app.use( express.static(path.join('uploads', 'images', 'users')));
+
 app.use(cors());
 
 // Logging middleware
